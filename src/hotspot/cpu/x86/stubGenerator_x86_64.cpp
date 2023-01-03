@@ -22,6 +22,7 @@
  *
  */
 
+#include <iostream>
 #include "precompiled.hpp"
 #include "asm/macroAssembler.hpp"
 #include "asm/macroAssembler.inline.hpp"
@@ -218,6 +219,7 @@ class StubGenerator: public StubCodeGenerator {
     assert((int)frame::entry_frame_after_call_words == -(int)rsp_after_call_off + 1 &&
            (int)frame::entry_frame_call_wrapper_offset == (int)call_wrapper_off,
            "adjust this code");
+    std::cout<<__FILE__<<" "<<__func__<<"\n"<<"generate stub for x86 64";
     StubCodeMark mark(this, "StubRoutines", "call_stub");
     address start = __ pc();
 

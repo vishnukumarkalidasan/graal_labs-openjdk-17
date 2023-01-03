@@ -22,6 +22,7 @@
  *
  */
 
+#include <iostream>
 #include "precompiled.hpp"
 #include "asm/assembler.inline.hpp"
 #include "compiler/oopMap.hpp"
@@ -175,6 +176,7 @@ class StubGenerator: public StubCodeGenerator {
     StubCodeMark mark(this, "StubRoutines", "call_stub");
     address start = __ pc();
 
+    std::cout<<__FILE__<<" "<<__func__<<"\n"<<"generate stub for aarch64";
 
     assert(frame::entry_frame_call_wrapper_offset == 0, "adjust this code");
 

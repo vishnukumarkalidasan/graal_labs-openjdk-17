@@ -48,6 +48,7 @@
 #include "runtime/signature.hpp"
 #include "runtime/stubRoutines.hpp"
 #include "runtime/thread.inline.hpp"
+#include <iostream>
 
 // -----------------------------------------------------
 // Implementation of JavaCallWrapper
@@ -340,6 +341,7 @@ void JavaCalls::call(JavaValue* result, const methodHandle& method, JavaCallArgu
   // This is used for e.g. Win32 structured exception handlers.
   // Need to wrap each and every time, since there might be native code down the
   // stack that has installed its own exception handlers.
+	std::cout<< __FILE__ << " " << __func__ << "\n";
   os::os_exception_wrapper(call_helper, result, method, args, THREAD);
 }
 
@@ -350,6 +352,7 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
   assert(!SafepointSynchronize::is_at_safepoint(), "call to Java code during VM operation");
   assert(!thread->handle_area()->no_handle_mark_active(), "cannot call out to Java here");
 
+	std::cout<< __FILE__ << " " << __func__ << "\n";
   // Verify the arguments
   if (JVMCI_ONLY(args->alternative_target().is_null() &&) (DEBUG_ONLY(true ||) CheckJNICalls)) {
     args->verify(method, result->get_type());
