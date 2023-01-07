@@ -352,7 +352,8 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
   assert(!SafepointSynchronize::is_at_safepoint(), "call to Java code during VM operation");
   assert(!thread->handle_area()->no_handle_mark_active(), "cannot call out to Java here");
 
-	std::cout<< __FILE__ << " " << __func__ << "\n";
+	tty->print_cr("%s %s \n", __FILE__, __func__);
+
   // Verify the arguments
   if (JVMCI_ONLY(args->alternative_target().is_null() &&) (DEBUG_ONLY(true ||) CheckJNICalls)) {
     args->verify(method, result->get_type());
@@ -377,6 +378,8 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
   // Since the call stub sets up like the interpreter we call the from_interpreted_entry
   // so we can go compiled via a i2c. Otherwise initial entry method will always
   // run interpreted.
+
+  tty->print_cr("%s %s \n", __FILE__, __func__);
   address entry_point = method->from_interpreted_entry();
   if (JvmtiExport::can_post_interpreter_events() && thread->is_interp_only_mode()) {
     entry_point = method->interpreter_entry();

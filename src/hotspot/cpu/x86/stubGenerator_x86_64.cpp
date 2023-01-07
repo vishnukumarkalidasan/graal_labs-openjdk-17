@@ -6723,7 +6723,7 @@ address generate_avx_ghash_processBlocks() {
   // Initialization
   void generate_initial() {
     // Generates all stubs and initializes the entry points
-
+    tty->print_cr("DEBUG_STUB_INIT: generate stub routines\n");
     // This platform-specific settings are needed by generate_call_stub()
     create_control_words();
 
@@ -6840,7 +6840,7 @@ address generate_avx_ghash_processBlocks() {
 
   void generate_all() {
     // Generates all stubs and initializes the entry points
-
+    tty->print_cr("DEBUG_STUB_INIT: generate all stubs and init entry points");
     // These entry points require SharedInfo::stack0 to be set up in
     // non-core builds and need to be relocatable, so they each
     // fabricate a RuntimeStub internally.

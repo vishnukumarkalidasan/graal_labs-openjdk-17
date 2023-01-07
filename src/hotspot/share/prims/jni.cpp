@@ -3790,7 +3790,7 @@ static jint attach_current_thread(JavaVM *vm, void **penv, void *_args, bool dae
     return JNI_EVERSION;
   }
   */
-
+tty->print_cr("%s %s \n", __FILE__, __func__);
   Thread* t = Thread::current_or_null();
   if (t != NULL) {
     // If executing from an atexit hook we may be in the VMThread.
