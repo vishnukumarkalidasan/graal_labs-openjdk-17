@@ -99,6 +99,7 @@ extern "C" {
 #define __ as->
 
 void Address::lea(MacroAssembler *as, Register r) const {
+	tty->print_cr("%s %s", __FILE__, __func__);
   Relocation* reloc = _rspec.reloc();
   relocInfo::relocType rtype = (relocInfo::relocType) reloc->type();
 
@@ -267,6 +268,8 @@ void Assembler::wrap_label(Label &L, prfop op, prefetch_insn insn) {
 // the absolute value of the immediate as for uimm24.
 void Assembler::add_sub_immediate(Register Rd, Register Rn, unsigned uimm, int op,
                                   int negated_op) {
+
+	tty->print_cr("%s %s", __FILE__, __func__);
   bool sets_flags = op & 1;   // this op sets flags
   union {
     unsigned u;
@@ -298,6 +301,7 @@ void Assembler::add_sub_immediate(Register Rd, Register Rn, unsigned uimm, int o
 }
 
 bool Assembler::operand_valid_for_add_sub_immediate(int64_t imm) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   bool shift = false;
   uint64_t uimm = (uint64_t)uabs((jlong)imm);
   if (uimm < (1 << 12))

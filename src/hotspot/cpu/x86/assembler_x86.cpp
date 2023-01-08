@@ -1245,12 +1245,14 @@ void Assembler::adcl(Register dst, Register src) {
 }
 
 void Assembler::addl(Address dst, int32_t imm32) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   InstructionMark im(this);
   prefix(dst);
   emit_arith_operand(0x81, rax, dst, imm32);
 }
 
 void Assembler::addb(Address dst, int imm8) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   InstructionMark im(this);
   prefix(dst);
   emit_int8((unsigned char)0x80);
@@ -1259,11 +1261,13 @@ void Assembler::addb(Address dst, int imm8) {
 }
 
 void Assembler::addw(Register dst, Register src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   (void)prefix_and_encode(dst->encoding(), src->encoding());
   emit_arith(0x03, 0xC0, dst, src);
 }
 
 void Assembler::addw(Address dst, int imm16) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   InstructionMark im(this);
   emit_int8(0x66);
   prefix(dst);
@@ -1273,6 +1277,7 @@ void Assembler::addw(Address dst, int imm16) {
 }
 
 void Assembler::addl(Address dst, Register src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   InstructionMark im(this);
   prefix(dst, src);
   emit_int8(0x01);
@@ -1280,11 +1285,13 @@ void Assembler::addl(Address dst, Register src) {
 }
 
 void Assembler::addl(Register dst, int32_t imm32) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   prefix(dst);
   emit_arith(0x81, 0xC0, dst, imm32);
 }
 
 void Assembler::addl(Register dst, Address src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   InstructionMark im(this);
   prefix(src, dst);
   emit_int8(0x03);
@@ -1292,11 +1299,13 @@ void Assembler::addl(Register dst, Address src) {
 }
 
 void Assembler::addl(Register dst, Register src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   (void) prefix_and_encode(dst->encoding(), src->encoding());
   emit_arith(0x03, 0xC0, dst, src);
 }
 
 void Assembler::addr_nop_4() {
+	tty->print_cr("%s %s", __FILE__, __func__);
   assert(UseAddressNop, "no CPU support");
   // 4 bytes: NOP DWORD PTR [EAX+0]
   emit_int32(0x0F,
@@ -1306,6 +1315,7 @@ void Assembler::addr_nop_4() {
 }
 
 void Assembler::addr_nop_5() {
+	tty->print_cr("%s %s", __FILE__, __func__);
   assert(UseAddressNop, "no CPU support");
   // 5 bytes: NOP DWORD PTR [EAX+EAX*0+0] 8-bits offset
   emit_int32(0x0F,
@@ -1316,6 +1326,7 @@ void Assembler::addr_nop_5() {
 }
 
 void Assembler::addr_nop_7() {
+	tty->print_cr("%s %s", __FILE__, __func__);
   assert(UseAddressNop, "no CPU support");
   // 7 bytes: NOP DWORD PTR [EAX+0] 32-bits offset
   emit_int24(0x0F,
@@ -1326,6 +1337,7 @@ void Assembler::addr_nop_7() {
 }
 
 void Assembler::addr_nop_8() {
+	tty->print_cr("%s %s", __FILE__, __func__);
   assert(UseAddressNop, "no CPU support");
   // 8 bytes: NOP DWORD PTR [EAX+EAX*0+0] 32-bits offset
   emit_int32(0x0F,
@@ -1337,6 +1349,7 @@ void Assembler::addr_nop_8() {
 }
 
 void Assembler::addsd(XMMRegister dst, XMMRegister src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   NOT_LP64(assert(VM_Version::supports_sse2(), ""));
   InstructionAttr attributes(AVX_128bit, /* rex_w */ VM_Version::supports_evex(), /* legacy_mode */ false, /* no_mask_reg */ true, /* uses_vl */ false);
   attributes.set_rex_vex_w_reverted();
@@ -1345,6 +1358,7 @@ void Assembler::addsd(XMMRegister dst, XMMRegister src) {
 }
 
 void Assembler::addsd(XMMRegister dst, Address src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   NOT_LP64(assert(VM_Version::supports_sse2(), ""));
   InstructionMark im(this);
   InstructionAttr attributes(AVX_128bit, /* rex_w */ VM_Version::supports_evex(), /* legacy_mode */ false, /* no_mask_reg */ true, /* uses_vl */ false);
@@ -1356,6 +1370,7 @@ void Assembler::addsd(XMMRegister dst, Address src) {
 }
 
 void Assembler::addss(XMMRegister dst, XMMRegister src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   NOT_LP64(assert(VM_Version::supports_sse(), ""));
   InstructionAttr attributes(AVX_128bit, /* rex_w */ false, /* legacy_mode */ false, /* no_mask_reg */ true, /* uses_vl */ false);
   int encode = simd_prefix_and_encode(dst, dst, src, VEX_SIMD_F3, VEX_OPCODE_0F, &attributes);
@@ -1363,6 +1378,7 @@ void Assembler::addss(XMMRegister dst, XMMRegister src) {
 }
 
 void Assembler::addss(XMMRegister dst, Address src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   NOT_LP64(assert(VM_Version::supports_sse(), ""));
   InstructionMark im(this);
   InstructionAttr attributes(AVX_128bit, /* rex_w */ false, /* legacy_mode */ false, /* no_mask_reg */ true, /* uses_vl */ false);
@@ -1373,6 +1389,7 @@ void Assembler::addss(XMMRegister dst, Address src) {
 }
 
 void Assembler::aesdec(XMMRegister dst, Address src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   assert(VM_Version::supports_aes(), "");
   InstructionMark im(this);
   InstructionAttr attributes(AVX_128bit, /* rex_w */ false, /* legacy_mode */ true, /* no_mask_reg */ true, /* uses_vl */ false);
@@ -1382,6 +1399,7 @@ void Assembler::aesdec(XMMRegister dst, Address src) {
 }
 
 void Assembler::aesdec(XMMRegister dst, XMMRegister src) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   assert(VM_Version::supports_aes(), "");
   InstructionAttr attributes(AVX_128bit, /* rex_w */ false, /* legacy_mode */ true, /* no_mask_reg */ true, /* uses_vl */ false);
   int encode = simd_prefix_and_encode(dst, dst, src, VEX_SIMD_66, VEX_OPCODE_0F_38, &attributes);

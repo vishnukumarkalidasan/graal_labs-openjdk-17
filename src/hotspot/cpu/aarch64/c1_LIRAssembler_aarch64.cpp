@@ -1670,6 +1670,7 @@ void LIR_Assembler::arith_op(LIR_Code code, LIR_Opr left, LIR_Opr right, LIR_Opr
     Register dreg = as_reg(dest);
 
     if (right->is_single_cpu()) {
+	tty->print_cr("%s %s", __FILE__, __func__);
       // cpu register - cpu register
 
       assert(left->type() == T_INT && right->type() == T_INT && dest->type() == T_INT,
@@ -1683,6 +1684,7 @@ void LIR_Assembler::arith_op(LIR_Code code, LIR_Opr left, LIR_Opr right, LIR_Opr
       }
 
     } else if (right->is_double_cpu()) {
+	tty->print_cr("%s %s", __FILE__, __func__);
       Register rreg = right->as_register_lo();
       // single_cpu + double_cpu: can happen with obj+long
       assert(code == lir_add || code == lir_sub, "mismatched arithmetic op");

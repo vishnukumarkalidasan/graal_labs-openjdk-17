@@ -2324,6 +2324,7 @@ void MacroAssembler::wrap_adds_subs_imm_insn(Register Rd, Register Rn, uint64_t 
 
 
 void MacroAssembler::add(Register Rd, Register Rn, RegisterOrConstant increment) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   if (increment.is_register()) {
     add(Rd, Rn, increment.as_register());
   } else {
@@ -2332,6 +2333,7 @@ void MacroAssembler::add(Register Rd, Register Rn, RegisterOrConstant increment)
 }
 
 void MacroAssembler::addw(Register Rd, Register Rn, RegisterOrConstant increment) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   if (increment.is_register()) {
     addw(Rd, Rn, increment.as_register());
   } else {
@@ -2340,6 +2342,7 @@ void MacroAssembler::addw(Register Rd, Register Rn, RegisterOrConstant increment
 }
 
 void MacroAssembler::sub(Register Rd, Register Rn, RegisterOrConstant decrement) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   if (decrement.is_register()) {
     sub(Rd, Rn, decrement.as_register());
   } else {
@@ -2348,6 +2351,7 @@ void MacroAssembler::sub(Register Rd, Register Rn, RegisterOrConstant decrement)
 }
 
 void MacroAssembler::subw(Register Rd, Register Rn, RegisterOrConstant decrement) {
+	tty->print_cr("%s %s", __FILE__, __func__);
   if (decrement.is_register()) {
     subw(Rd, Rn, decrement.as_register());
   } else {

@@ -1919,6 +1919,7 @@ CompileLog* CompileBroker::get_log(CompilerThread* ct) {
 //
 // The main loop run by a CompilerThread.
 void CompileBroker::compiler_thread_loop() {
+	tty->print_cr("DEBUG_COMPILER: start of compiler thread at %s", __func__);
   CompilerThread* thread = CompilerThread::current();
   CompileQueue* queue = thread->queue();
   // For the thread that initializes the ciObjectFactory
@@ -2249,6 +2250,7 @@ void CompileBroker::invoke_compiler_on_method(CompileTask* task) {
 
 #if INCLUDE_JVMCI
   if (UseJVMCICompiler && comp != NULL && comp->is_jvmci()) {
+	tty->print_cr("DEBUG_COMPILER: %s: ucing JVMCI compler for method : %s", __func__, target_handle->name()->as_C_string());
     JVMCICompiler* jvmci = (JVMCICompiler*) comp;
 
     TraceTime t1("compilation", &time);
@@ -2295,6 +2297,7 @@ void CompileBroker::invoke_compiler_on_method(CompileTask* task) {
   } else
 #endif // INCLUDE_JVMCI
   {
+	tty->print_cr("DEBUG_COMPILER: %s: ucing C1 Compler for method : %s", __func__, target_handle->name()->as_C_string());
     NoHandleMark  nhm;
     ThreadToNativeFromVM ttn(thread);
 
