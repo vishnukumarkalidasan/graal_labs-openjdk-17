@@ -1281,7 +1281,7 @@ void Method::set_code(const methodHandle& mh, CompiledMethod *code) {
   assert_lock_strong(CompiledMethod_lock);
   assert( code, "use clear_code to remove code" );
   assert( mh->check_code(), "" );
-
+  tty->print_cr("installing compiled code");
   guarantee(mh->adapter() != NULL, "Adapter blob must already exist!");
 
   // These writes must happen in this order, because the interpreter will

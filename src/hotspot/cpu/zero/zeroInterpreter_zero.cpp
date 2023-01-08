@@ -162,6 +162,7 @@ intptr_t narrow(BasicType type, intptr_t result) {
 
 
 void ZeroInterpreter::main_loop(int recurse, TRAPS) {
+  tty->print_cr("ZeroInterpreter: entry\n");
   JavaThread *thread = THREAD;
   ZeroStack *stack = thread->zero_stack();
 

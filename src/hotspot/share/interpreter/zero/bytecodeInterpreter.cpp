@@ -403,6 +403,8 @@ template void BytecodeInterpreter::run<false>(interpreterState istate);
 
 template<bool JVMTI_ENABLED>
 void BytecodeInterpreter::run(interpreterState istate) {
+
+  //tty->print_cr("DEBUG_INTRPTR: starting of interpreter thread");
   intptr_t*        topOfStack = (intptr_t *)istate->stack(); /* access with STACK macros */
   address          pc = istate->bcp();
   jubyte opcode;
@@ -525,6 +527,9 @@ void BytecodeInterpreter::run(interpreterState istate) {
       return;
     }
     case method_entry: {
+  	tty->print_cr("DEBUG_INTRPTR: interpreter thread method_entry %s ", METHOD->print_value_string());
+  //	tty->print_cr("DEBUG_INTRPTR: interpreter thread method_entry %s ", _method->name_and_sig_as_C_string());
+//	this->print();
       THREAD->set_do_not_unlock();
 
       // Lock method if synchronized.
@@ -572,6 +577,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
     }
 
     case popping_frame: {
+  //tty->print_cr("DEBUG_INTRPTR: interpreter thread popping_frame");
       // returned from a java call to pop the frame, restart the call
       // clear the message so we don't confuse ourselves later
       assert(THREAD->pop_frame_in_process(), "wrong frame pop state");
@@ -581,6 +587,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
     }
 
     case method_resume: {
+  //tty->print_cr("DEBUG_INTRPTR: interpreter thread method_resume");
       if ((istate->_stack_base - istate->_stack_limit) != istate->method()->max_stack() + 1) {
         // resume
         os::breakpoint();
@@ -601,6 +608,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
     }
 
     case deopt_resume2: {
+  //tty->print_cr("DEBUG_INTRPTR: interpreter thread deopt_resume2");
       // Returned from an opcode that will reexecute. Deopt was
       // a result of a PopFrame request.
       //
@@ -608,6 +616,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
     }
 
     case deopt_resume: {
+  //tty->print_cr("DEBUG_INTRPTR: interpreter thread deopt_resume");
       // Returned from an opcode that has completed. The stack has
       // the result all we need to do is skip across the bytecode
       // and continue (assuming there is no exception pending)
@@ -629,6 +638,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
       goto run;
     }
     case got_monitors: {
+  //tty->print_cr("DEBUG_INTRPTR: interpreter thread got monitors");
       // continue locking now that we have a monitor to use
       // we expect to find newly allocated monitor at the "top" of the monitor stack.
       oop lockee = STACK_OBJECT(-1);
@@ -663,6 +673,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
 
 run:
 
+  //tty->print_cr("DEBUG_INTRPTR: starting of interpreter while loop");
   DO_UPDATE_INSTRUCTION_COUNT(*pc)
   DEBUGGER_SINGLE_STEP_NOTIFY();
 #ifdef PREFETCH_OPCCODE
@@ -2094,7 +2105,8 @@ run:
           SET_STACK_OBJECT(cache->appendix_if_resolved(cp), 0);
           MORE_STACK(1);
         }
-
+	
+	//tty->print_cr("invokedynamic: using compiled method %s", METHOD->print_value_string());
         istate->set_msg(call_method);
         istate->set_callee(method);
         istate->set_callee_entry_point(method->from_interpreted_entry());
@@ -2122,6 +2134,8 @@ run:
           SET_STACK_OBJECT(cache->appendix_if_resolved(cp), 0);
           MORE_STACK(1);
         }
+	
+	//tty->print_cr("invokehandle: using compiled method %s", METHOD->print_value_string());
 
         istate->set_msg(call_method);
         istate->set_callee(method);
@@ -2185,6 +2199,8 @@ run:
           callee = cache->f2_as_vfinal_method();
         }
         if (callee != NULL) {
+	
+	//tty->print_cr("invokeinterface: using compiled method %s", METHOD->print_value_string());
           istate->set_callee(callee);
           istate->set_callee_entry_point(callee->from_interpreted_entry());
           if (JVMTI_ENABLED && THREAD->is_interp_only_mode()) {
@@ -2244,6 +2260,7 @@ run:
           CALL_VM(InterpreterRuntime::throw_AbstractMethodErrorVerbose(THREAD, rcvr->klass(), interface_method),
                   handle_exception);
         }
+	//tty->print_cr("invokeinterface2: using compiled method %s", METHOD->print_value_string());
 
         istate->set_callee(callee);
         istate->set_callee_entry_point(callee->from_interpreted_entry());
@@ -2313,6 +2330,7 @@ run:
             callee = cache->f1_as_method();
           }
 
+	//tty->print_cr("invokevirt/specl/static: using compiled method %s", METHOD->print_value_string());
           istate->set_callee(callee);
           istate->set_callee_entry_point(callee->from_interpreted_entry());
           if (JVMTI_ENABLED && THREAD->is_interp_only_mode()) {
