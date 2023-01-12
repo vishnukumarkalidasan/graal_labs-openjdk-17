@@ -76,6 +76,7 @@ const int locals_offset = frame::interpreter_frame_locals_offset * wordSize;
 //-----------------------------------------------------------------------------
 
 address TemplateInterpreterGenerator::generate_StackOverflowError_handler() {
+  tty->print_cr("DEBUG_TEMPINTRPTR: %s %s", __FILE__, __func__);
   address entry = __ pc();
 
 #ifdef ASSERT

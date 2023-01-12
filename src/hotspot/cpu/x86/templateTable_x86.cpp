@@ -980,6 +980,7 @@ void TemplateTable::aload_0_internal(RewriteControl rc) {
 }
 
 void TemplateTable::istore() {
+  tty->print_cr("DEBUG_INTRPTRTABLE: %s %s", __FILE__, __func__);
   transition(itos, vtos);
   locals_index(rbx);
   __ movl(iaddress(rbx), rax);
