@@ -416,7 +416,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
 #undef THREAD
 #define THREAD istate->thread()
 #endif
-
+//tty->print_cr("interpreting method %s  Frame: %ld", istate->method()->name()->as_C_string(), (istate->_stack_base - istate->_stack_limit) );
 #ifdef ASSERT
   assert(labs(istate->stack_base() - istate->stack_limit()) == (istate->method()->max_stack() + 1),
          "Bad stack limit");
@@ -527,7 +527,7 @@ void BytecodeInterpreter::run(interpreterState istate) {
       return;
     }
     case method_entry: {
-  	tty->print_cr("DEBUG_INTRPTR: interpreter thread method_entry %s ", METHOD->print_value_string());
+  	//tty->print_cr("DEBUG_INTRPTR: interpreter thread method_entry %s ", METHOD->print_value_string());
   //	tty->print_cr("DEBUG_INTRPTR: interpreter thread method_entry %s ", _method->name_and_sig_as_C_string());
 //	this->print();
       THREAD->set_do_not_unlock();
@@ -684,6 +684,13 @@ run:
   while (1)
 #endif
   {
+   if (strcmp(istate->method()->name()->as_C_string(), "workload" ) == 0 ) {
+	long int size = (istate->_stack_base - istate->_stack_limit);
+	tty->print_cr("PRINT_STACK: interpreting method %s  Frame: %ld", istate->method()->name()->as_C_string(), size);
+	for(int i = 0; i<size; i++) {
+		tty->print_cr("PRINT_STACK: stack: %lx, %p", istate->stack()[-i], &istate->stack()[-i]);
+	}
+    }
 #ifndef PREFETCH_OPCCODE
       opcode = *pc;
 #endif
@@ -2434,8 +2441,12 @@ run:
           goto finish;
 
       } /* switch(opc) */
-
-
+/*
+    if (strcmp(istate->method()->name()->as_C_string(), "workload" ) == 0 ) {
+	tty->print_cr("PRINT_STACK: interpreting method %s  Frame: %ld", istate->method()->name()->as_C_string(), (istate->_stack_base - istate->_stack_limit) );
+	tty->print_cr("PRINT_STACK: stack: %ld, %ld, %ld", istate->stack()[0], istate->stack()[1], istate->stack()[-1]);
+    }
+    */
 #ifdef USELABELS
     check_for_exception:
 #endif
