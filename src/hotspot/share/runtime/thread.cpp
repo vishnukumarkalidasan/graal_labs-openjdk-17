@@ -2347,7 +2347,7 @@ void JavaThread::popframe_free_preserved_args() {
   _popframe_preserved_args_size = 0;
 }
 
-#ifndef PRODUCT
+//#ifndef PRODUCT
 
 void JavaThread::trace_frames() {
   tty->print_cr("[Describe stack]");
@@ -2428,7 +2428,7 @@ void JavaThread::trace_stack() {
 }
 
 
-#endif // PRODUCT
+//#endif // PRODUCT
 
 
 javaVFrame* JavaThread::last_java_vframe(RegisterMap *reg_map) {

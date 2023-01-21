@@ -609,7 +609,7 @@ javaVFrame* vframeStreamCommon::asJavaVFrame() {
 }
 
 
-#ifndef PRODUCT
+#ifdef PRODUCT
 void vframe::print() {
   if (WizardMode) _fr.print_value_on(tty,NULL);
 }

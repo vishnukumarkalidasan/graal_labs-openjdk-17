@@ -214,7 +214,7 @@ BasicLock* StackValue::resolve_monitor_lock(const frame* fr, Location location) 
 }
 
 
-#ifndef PRODUCT
+#ifdef PRODUCT
 
 void StackValue::print_on(outputStream* st) const {
   switch(_type) {

@@ -684,13 +684,7 @@ run:
   while (1)
 #endif
   {
-   if (strcmp(istate->method()->name()->as_C_string(), "workload" ) == 0 ) {
-	long int size = (istate->_stack_base - istate->_stack_limit);
-	tty->print_cr("PRINT_STACK: interpreting method %s  Frame: %ld", istate->method()->name()->as_C_string(), size);
-	for(int i = 0; i<size; i++) {
-		tty->print_cr("PRINT_STACK: stack: %lx, %p", istate->stack()[-i], &istate->stack()[-i]);
-	}
-    }
+   
 #ifndef PREFETCH_OPCCODE
       opcode = *pc;
 #endif
@@ -705,7 +699,14 @@ run:
       /* QQQ Hmm this has knowledge of direction, ought to be a stack method */
       assert(topOfStack >= istate->stack_limit(), "Stack overrun");
       assert(topOfStack < istate->stack_base(), "Stack underrun");
-
+   if (strcmp(istate->method()->name()->as_C_string(), "workload" ) == 0 || strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 ) {
+	long int size = (istate->stack_base() - istate->stack_limit());
+	tty->print_cr("PRINT_STACK: interpreting method %s  Frame: %ld", istate->method()->name()->as_C_string(), size);
+	intptr_t *tmp = istate->stack_base();
+	for(int i = 0; i<size; i++, --tmp) {
+		tty->print_cr("PRINT_STACK: stack: %ld, %p", *tmp, tmp);
+	}
+    }
 #ifdef USELABELS
       DISPATCH(opcode);
 #else
@@ -2459,6 +2460,7 @@ run:
       goto handle_exception;
     }
   do_continue: ;
+ 
 
   } /* while (1) interpreter loop */
 

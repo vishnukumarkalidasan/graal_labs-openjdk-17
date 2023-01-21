@@ -179,6 +179,18 @@ void ZeroInterpreter::main_loop(int recurse, TRAPS) {
   int result_slots = 0;
 
   while (true) {
+if (strcmp(method->name()->as_C_string(), "mainnnn") == 0 || strcmp(method->name()->as_C_string(), "workload") == 0) {
+    thread->trace_frames();
+}
+    /*
+    ZeroStack* zsp = stack;
+    ZeroStack* zsp_end = stack + Interpreter::stackElementWords;
+    tty->print_cr("Zero stack contents: of size %ld \n", zsp_end - zsp);
+	while (zsp < zsp_end) {
+	       tty->print_cr("  %ld\n", (long) *zsp);
+	       zsp++;
+	}
+	*/
     // We can set up the frame anchor with everything we want at
     // this point as we are thread_in_Java and no safepoints can
     // occur until we go to vm mode.  We do have to clear flags

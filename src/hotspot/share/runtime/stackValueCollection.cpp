@@ -130,7 +130,7 @@ void StackValueCollection::set_double_at(int slot, jdouble value) {
 #endif
 }
 
-#ifndef PRODUCT
+#ifdef PRODUCT
 void StackValueCollection::print() {
   for(int index = 0; index < size(); index++) {
     tty->print("\t  %2d ", index);

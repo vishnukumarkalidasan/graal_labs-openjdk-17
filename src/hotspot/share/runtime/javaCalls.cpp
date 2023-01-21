@@ -341,7 +341,7 @@ void JavaCalls::call(JavaValue* result, const methodHandle& method, JavaCallArgu
   // This is used for e.g. Win32 structured exception handlers.
   // Need to wrap each and every time, since there might be native code down the
   // stack that has installed its own exception handlers.
-	std::cout<< __FILE__ << " " << __func__ << "\n";
+	//std::cout<< __FILE__ << " " << __func__ << "\n";
   os::os_exception_wrapper(call_helper, result, method, args, THREAD);
 }
 
@@ -352,7 +352,7 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
   assert(!SafepointSynchronize::is_at_safepoint(), "call to Java code during VM operation");
   assert(!thread->handle_area()->no_handle_mark_active(), "cannot call out to Java here");
 
-	tty->print_cr("%s %s \n", __FILE__, __func__);
+	//tty->print_cr("%s %s \n", __FILE__, __func__);
 
   // Verify the arguments
   if (JVMCI_ONLY(args->alternative_target().is_null() &&) (DEBUG_ONLY(true ||) CheckJNICalls)) {
@@ -379,7 +379,7 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
   // so we can go compiled via a i2c. Otherwise initial entry method will always
   // run interpreted.
 
-  tty->print_cr("%s %s \n", __FILE__, __func__);
+  //tty->print_cr("%s %s \n", __FILE__, __func__);
   address entry_point = method->from_interpreted_entry();
   if (JvmtiExport::can_post_interpreter_events() && thread->is_interp_only_mode()) {
     entry_point = method->interpreter_entry();

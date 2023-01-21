@@ -99,7 +99,7 @@ class vframe: public ResourceObj {
   virtual bool is_interpreted_frame() const { return false; }
   virtual bool is_compiled_frame()    const { return false; }
 
-#ifndef PRODUCT
+#ifdef PRODUCT
   // printing operations
   virtual void print_value() const;
   virtual void print();
@@ -144,7 +144,7 @@ class javaVFrame: public vframe {
   void print_lock_info_on(outputStream* st, int frame_count);
   void print_lock_info(int frame_count) { print_lock_info_on(tty, frame_count); }
 
-#ifndef PRODUCT
+#ifdef PRODUCT
  public:
   // printing operations
   void print();
@@ -195,7 +195,7 @@ class interpretedVFrame: public javaVFrame {
   // returns where the parameters starts relative to the frame pointer
   int start_of_parameters() const;
 
-#ifndef PRODUCT
+#ifdef PRODUCT
  public:
   // verify operations
   void verify() const;
@@ -208,7 +208,7 @@ class externalVFrame: public vframe {
  protected:
   externalVFrame(const frame* fr, const RegisterMap* reg_map, JavaThread* thread) : vframe(fr, reg_map, thread) {}
 
-#ifndef PRODUCT
+#ifdef PRODUCT
  public:
   // printing operations
   void print_value() const;
@@ -231,7 +231,7 @@ class entryVFrame: public externalVFrame {
     return (entryVFrame*) vf;
   }
 
-#ifndef PRODUCT
+#ifdef PRODUCT
  public:
   // printing
   void print_value() const;
