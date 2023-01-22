@@ -58,6 +58,7 @@
 #include "utilities/debug.hpp"
 #include "utilities/exceptions.hpp"
 #include "utilities/macros.hpp"
+#include "classfile/systemDictionary.hpp"
 
 // no precompiled headers
 
@@ -2330,16 +2331,34 @@ run:
                   Because vtables have the same offset for ArrayKlass and InstanceKlass.
               */
               callee = (Method*) rcvrKlass->method_at_vtable(cache->f2_as_index());
+
             }
           } else {
             if ((Bytecodes::Code)opcode == Bytecodes::_invokespecial) {
               CHECK_NULL(STACK_OBJECT(-(cache->parameter_size())));
             }
             callee = cache->f1_as_method();
+
           }
+
+    
 
 	//tty->print_cr("invokevirt/specl/static: using compiled method %s", METHOD->print_value_string());
           istate->set_callee(callee);
+	 //tty->print_cr("class holder name = %s   ", istate->method()->method_holder()->name()->as_C_string());
+#if 1
+if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(istate->method()->method_holder()->name()->as_C_string(), "HelloWorld") == 0 ) {
+    	Klass* hijackClass = istate->method()->method_holder();//SystemDictionary::resolve_or_null(vmSymbols::symbol_at(vmSymbols::find_sid("HelloWorld")), THREAD);
+/*	if (hijackClass != NULL) {
+		Method* hyjack = hijackClass->lookup_method(vmSymbols::symbol_at(vmSymbols::find_sid("hyjack")),vmSymbols::symbol_at(vmSymbols::find_sid("V")));
+		tty->print_cr("found method:              %s ", hyjack->name()->as_C_string());
+	} else {
+		tty->print_cr("hyjack method not found");
+	}
+	*/
+
+    }
+#endif
           istate->set_callee_entry_point(callee->from_interpreted_entry());
           if (JVMTI_ENABLED && THREAD->is_interp_only_mode()) {
             istate->set_callee_entry_point(callee->interpreter_entry());

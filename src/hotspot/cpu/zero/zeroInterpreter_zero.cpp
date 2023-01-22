@@ -174,13 +174,15 @@ void ZeroInterpreter::main_loop(int recurse, TRAPS) {
   InterpreterFrame *frame = thread->top_zero_frame()->as_interpreter_frame();
   interpreterState istate = frame->interpreter_state();
   Method* method = istate->method();
-
+ConstantPool*   m_cp = method->constants(); // method()->constants()->cache()
   intptr_t *result = NULL;
   int result_slots = 0;
 
   while (true) {
 if (strcmp(method->name()->as_C_string(), "mainnnn") == 0 || strcmp(method->name()->as_C_string(), "workload") == 0) {
-    thread->trace_frames();
+    //thread->trace_frames();
+	m_cp->print_on(tty);
+	m_cp->cache()->print_on(tty);
 }
     /*
     ZeroStack* zsp = stack;
