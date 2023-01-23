@@ -79,6 +79,7 @@
 #define USELABELS
 #endif
 #endif
+#undef USELABELS
 
 #undef CASE
 #ifdef USELABELS
@@ -702,7 +703,7 @@ run:
       assert(topOfStack < istate->stack_base(), "Stack underrun");
    if (strcmp(istate->method()->name()->as_C_string(), "workload" ) == 0 || strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 ) {
 	long int size = (istate->stack_base() - istate->stack_limit());
-	tty->print_cr("PRINT_STACK: interpreting method %s  Frame: %ld", istate->method()->name()->as_C_string(), size);
+	tty->print_cr("PRINT_OPCODE: interpreting method %s  for opcode: %s pc: %p ", istate->method()->name()->as_C_string(), Bytecodes::name((Bytecodes::Code)*pc), pc);
 	intptr_t *tmp = istate->stack_base();
 	for(int i = 0; i<size; i++, --tmp) {
 		tty->print_cr("PRINT_STACK: stack: %ld, %p", *tmp, tmp);
@@ -2286,6 +2287,7 @@ run:
         u2 index = Bytes::get_native_u2(pc+1);
 
         ConstantPoolCacheEntry* cache = cp->entry_at(index);
+
         // QQQ Need to make this as inlined as possible. Probably need to split all the bytecode cases
         // out so c++ compiler has a chance for constant prop to fold everything possible away.
 
@@ -2295,7 +2297,7 @@ run:
           cache = cp->entry_at(index);
         }
 
-        istate->set_msg(call_method);
+       // istate->set_msg(call_method);
         {
           Method* callee;
           if ((Bytecodes::Code)opcode == Bytecodes::_invokevirtual) {
@@ -2340,13 +2342,8 @@ run:
             callee = cache->f1_as_method();
 
           }
-
-    
-
-	//tty->print_cr("invokevirt/specl/static: using compiled method %s", METHOD->print_value_string());
-          istate->set_callee(callee);
-	 //tty->print_cr("class holder name = %s   ", istate->method()->method_holder()->name()->as_C_string());
-#if 1
+int skip = 0;
+ #if 1
 if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(istate->method()->method_holder()->name()->as_C_string(), "HelloWorld") == 0 ) {
     	Klass* hijackClass = istate->method()->method_holder();//SystemDictionary::resolve_or_null(vmSymbols::symbol_at(vmSymbols::find_sid("HelloWorld")), THREAD);
 /*	if (hijackClass != NULL) {
@@ -2356,9 +2353,22 @@ if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(ista
 		tty->print_cr("hyjack method not found");
 	}
 	*/
+	//cache->print_entry_on(tty);
+	tty->print_cr("pc for main = %p, %s while calling: %s ", pc, Bytecodes::name((Bytecodes::Code)*pc), callee->name()->as_C_string());
+	if (strcmp(callee->name()->as_C_string(), "workload") == 0){
+		tty->print_cr("hijacking the program to hyjack function....");
+        	UPDATE_PC_AND_CONTINUE(8);
+		skip = 0;
+	}
 
     }
 #endif
+   
+
+        istate->set_msg(call_method);
+	//tty->print_cr("invokevirt/specl/static: using compiled method %s", METHOD->print_value_string());
+          istate->set_callee(callee);
+	 //tty->print_cr("class holder name = %s   ", istate->method()->method_holder()->name()->as_C_string());
           istate->set_callee_entry_point(callee->from_interpreted_entry());
           if (JVMTI_ENABLED && THREAD->is_interp_only_mode()) {
             istate->set_callee_entry_point(callee->interpreter_entry());

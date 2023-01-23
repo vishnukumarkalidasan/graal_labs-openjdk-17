@@ -181,8 +181,10 @@ ConstantPool*   m_cp = method->constants(); // method()->constants()->cache()
   while (true) {
 if (strcmp(method->name()->as_C_string(), "mainnnn") == 0 || strcmp(method->name()->as_C_string(), "workload") == 0) {
     //thread->trace_frames();
-	m_cp->print_on(tty);
 	m_cp->cache()->print_on(tty);
+    for (int i = 1; i < m_cp->length(); i++) {
+	m_cp->print_entry_on(i, tty);
+    }
 }
     /*
     ZeroStack* zsp = stack;
