@@ -2458,6 +2458,26 @@ if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(ista
                               METHOD, pc);
           RESET_LAST_JAVA_FRAME();
           CACHE_STATE();
+	  {
+	  	std::ofstream zsdump("zerostack.dump");
+		JavaThread *thread = THREAD;
+  		ZeroStack *stack = thread->zero_stack();
+		InterpreterFrame *frame = thread->top_zero_frame()->as_interpreter_frame();
+  		interpreterState istate = frame->interpreter_state();
+  		Method* method = istate->method();
+		ConstantPool*   m_cp = method->constants();
+		/*
+		 intptr_t* zsp = stack->sp();
+     	   	for (int i = 0; i< (stack->total_words() - stack->available_words()); i++, zsp++) {
+        	        tty->print_cr("Zerostack: [%d] %ld, %p", i, *zsp, zsp);
+        	}*/
+    		//thread->trace_frames();
+    		m_cp->cache()->print_on((outputStream *)&zsdump);
+    		for (int i = 1; i < m_cp->length(); i++) {
+        		m_cp->print_entry_on(i, (outputStream *)&zsdump);
+    		}
+		zsdump.close();
+	  }
           if (THREAD->has_pending_exception()) goto handle_exception;
             CALL_VM(InterpreterRuntime::_breakpoint(THREAD, METHOD, pc),
                                                     handle_exception);
