@@ -59,7 +59,9 @@
 #include "utilities/exceptions.hpp"
 #include "utilities/macros.hpp"
 #include "classfile/systemDictionary.hpp"
+/* dumper */
 #include "fstream"
+#include "services/heapDumper.hpp"
 
 // no precompiled headers
 
@@ -2459,7 +2461,7 @@ if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(ista
           RESET_LAST_JAVA_FRAME();
           CACHE_STATE();
 	  {
-	  	std::ofstream zsdump("zerostack.dump");
+	  	fileStream zsdump("zerostack.dump");
 		JavaThread *thread = THREAD;
   		ZeroStack *stack = thread->zero_stack();
 		InterpreterFrame *frame = thread->top_zero_frame()->as_interpreter_frame();
@@ -2472,11 +2474,17 @@ if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(ista
         	        tty->print_cr("Zerostack: [%d] %ld, %p", i, *zsp, zsp);
         	}*/
     		//thread->trace_frames();
-    		m_cp->cache()->print_on((outputStream *)&zsdump);
+    		m_cp->cache()->print_on(&zsdump);
     		for (int i = 1; i < m_cp->length(); i++) {
-        		m_cp->print_entry_on(i, (outputStream *)&zsdump);
+        		m_cp->print_entry_on(i, &zsdump);
     		}
-		zsdump.close();
+		intptr_t* zsp = stack->sp();
+		zsdump.print_cr("Zerostack:");
+		for (int i = 0; i< (stack->total_words() - stack->available_words()); i++, zsp++) {
+		      tty->print_cr("[%d] %ld, %p", i, *zsp, zsp);
+		}
+		zsdump.flush();
+		HeapDumper::dump_heap();
 	  }
           if (THREAD->has_pending_exception()) goto handle_exception;
             CALL_VM(InterpreterRuntime::_breakpoint(THREAD, METHOD, pc),
