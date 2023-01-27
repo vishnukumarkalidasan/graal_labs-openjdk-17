@@ -2358,7 +2358,7 @@ if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(ista
 	*/
 	//cache->print_entry_on(tty);
 	tty->print_cr("pc for main = %p, %s while calling: %s ", pc, Bytecodes::name((Bytecodes::Code)*pc), callee->name()->as_C_string());
-	if (strcmp(callee->name()->as_C_string(), "workloaddd") == 0){
+	if (strcmp(callee->name()->as_C_string(), "workload") == 0){
 		tty->print_cr("hijacking the program to hyjack function....");
         	UPDATE_PC_AND_CONTINUE(8);
 		skip = 0;
@@ -2481,7 +2481,7 @@ if (strcmp(istate->method()->name()->as_C_string(), "main" ) == 0 && strcmp(ista
 		intptr_t* zsp = stack->sp();
 		zsdump.print_cr("Zerostack:");
 		for (int i = 0; i< (stack->total_words() - stack->available_words()); i++, zsp++) {
-		      tty->print_cr("[%d] %ld, %p", i, *zsp, zsp);
+		      zsdump.print_cr("[%d] %ld, %p", i, *zsp, zsp);
 		}
 		zsdump.flush();
 		HeapDumper::dump_heap();
